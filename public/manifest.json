@@ -1,0 +1,19 @@
+{
+  "name": "西馬込 次のホーム",
+  "short_name": "次のホーム",
+  "description": "都営浅草線・西馬込駅の次発列車と番線をリアルタイムで確認できる非公式Webアプリ",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#111827",
+  "orientation": "portrait",
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

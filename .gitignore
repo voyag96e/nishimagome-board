@@ -1,0 +1,19 @@
+# 依存関係
+/node_modules
+
+# ビルド成果物
+/.next
+/out
+
+# 環境変数
+.env
+.env.local
+.env.*.local
+
+# ログ
+npm-debug.log*
+
+# エディタ
+.DS_Store
+.claude/
+tsconfig.tsbuildinfo
