@@ -341,6 +341,79 @@ const PLATFORM_OVERRIDES: Record<string, string> = {
 
 ---
 
+## アクセス解析の確認方法（Vercel Analytics）
+
+### 有効化手順
+
+1. [vercel.com](https://vercel.com) にログインし、このプロジェクトを開く
+2. 上部タブの「Analytics」をクリック
+3. 「Enable Analytics」ボタンをクリックして有効化
+4. 次のデプロイ（`git push`）以降、データが収集されはじめる
+
+### 確認できる指標
+
+| 指標 | 内容 |
+|---|---|
+| ページビュー（Page Views） | 総アクセス数 |
+| ユニークユーザー（Unique Visitors） | 個別ユーザー数 |
+| 参照元（Referrers） | どこから来たか（Google検索・SNS・直接アクセス等） |
+| デバイス | スマホ / タブレット / PC の比率 |
+| アクセスされたページ | URLごとのアクセス数（このアプリは `/` のみ） |
+
+### 集客施策の効果測定
+
+QRコード・SNS・チラシなど配布経路ごとにアクセス元を把握するには、URLにパラメータを付与する。
+
+```
+https://nishimagome-board.vercel.app/?utm_source=flyer
+https://nishimagome-board.vercel.app/?utm_source=twitter
+https://nishimagome-board.vercel.app/?utm_source=qr
+```
+
+Vercel Analytics の「Referrers」画面でアクセス元を確認し、どの施策が効果的かを判断できる。
+
+---
+
+## SEO / 検索エンジン対応
+
+### Google Search Console への登録
+
+1. [search.google.com/search-console](https://search.google.com/search-console) を開く
+2. 「URLプレフィックス」に `https://nishimagome-board.vercel.app` を入力
+3. 所有権確認方法として「HTMLタグ」を選択し、表示されたメタタグの `content` 値をコピー
+4. `src/app/layout.tsx` の `metadata` オブジェクトに以下を追加する:
+   ```typescript
+   verification: {
+     google: "ここにコピーしたcontent値を貼る",
+   },
+   ```
+5. `git push` → Vercel再デプロイ後、Search Console で「確認」をクリック
+6. 確認後、左メニュー「URL検査」でインデックスをリクエストする
+
+### sitemap.xml / robots.txt
+
+- `https://nishimagome-board.vercel.app/sitemap.xml` — 自動生成（`src/app/sitemap.ts`）
+- `https://nishimagome-board.vercel.app/robots.txt` — 自動生成（`src/app/robots.ts`）
+
+Search Console の左メニュー「サイトマップ」から `/sitemap.xml` を登録しておくと、インデックスが早まる。
+
+---
+
+## 今後の収益化案
+
+現時点では広告・課金なし。以下を段階的に検討する。
+
+| 施策 | 内容 | 優先度 |
+|---|---|---|
+| 地域広告 | 西馬込・馬込周辺の店舗・サービスのバナー掲載 | 中 |
+| お知らせ枠スポンサー | 画面下部の「西馬込のお知らせ」枠に地元店舗のお知らせを有料掲載 | 中 |
+| クーポン掲載 | 近隣店舗のクーポンコードを表示 | 低 |
+| スポンサー表示 | 「○○スポンサード」ラベル付きで駅周辺事業者を紹介 | 低 |
+
+**方針**: メイン機能（番線・時刻表示）の邪魔をしない。広告感を強くせず「地域情報」として自然に組み込む。まず利用者を増やすことを優先する。
+
+---
+
 ## セットアップ（ローカル開発）
 
 ```bash

@@ -128,6 +128,7 @@ function TrainRow({
 export default function DepartureBoard({ timetables }: Props) {
   const [now, setNow] = useState<Date | null>(null);
   const [lastUpdated, setLastUpdated] = useState("");
+  const [installHintDismissed, setInstallHintDismissed] = useState(true);
 
   useEffect(() => {
     const update = () => {
@@ -144,6 +145,12 @@ export default function DepartureBoard({ timetables }: Props) {
     update();
     const timer = setInterval(update, 30_000);
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!localStorage.getItem("pwa-hint-dismissed")) {
+      setInstallHintDismissed(false);
+    }
   }, []);
 
   if (!now) {
@@ -290,6 +297,43 @@ export default function DepartureBoard({ timetables }: Props) {
       {upcoming.length === 0 && (
         <div className="text-center py-12 text-gray-500">
           <p>本日の列車は終了しました</p>
+        </div>
+      )}
+
+      {/* 西馬込のお知らせ */}
+      <div className="mt-5 rounded-xl border border-gray-800 bg-gray-900/40 px-4 py-3">
+        <p className="text-xs text-gray-500 font-semibold mb-1.5 tracking-wide">
+          西馬込のお知らせ
+        </p>
+        <p className="text-xs text-gray-600">
+          西馬込周辺のお店・地域情報を掲載予定です
+        </p>
+      </div>
+
+      {/* ホーム画面追加案内 */}
+      {!installHintDismissed && (
+        <div className="mt-4 rounded-xl border border-gray-700 bg-gray-800/60 px-4 py-3">
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-semibold text-gray-300">
+                ホーム画面に追加すると便利です
+              </p>
+              <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+                <span className="block">iPhone: Safari の共有ボタン → 「ホーム画面に追加」</span>
+                <span className="block">Android: Chrome のメニュー → 「ホーム画面に追加」</span>
+              </p>
+            </div>
+            <button
+              onClick={() => {
+                localStorage.setItem("pwa-hint-dismissed", "1");
+                setInstallHintDismissed(true);
+              }}
+              className="text-gray-600 hover:text-gray-400 text-lg leading-none shrink-0 pt-0.5"
+              aria-label="閉じる"
+            >
+              ×
+            </button>
+          </div>
         </div>
       )}
 

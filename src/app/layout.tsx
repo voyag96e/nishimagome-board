@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 const APP_NAME = "西馬込 次のホーム";
@@ -52,7 +53,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body className="bg-gray-950 text-white min-h-screen">{children}</body>
+      <body className="bg-gray-950 text-white min-h-screen">
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
