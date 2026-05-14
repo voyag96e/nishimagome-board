@@ -1,3 +1,8 @@
+## 公開URL
+
+https://nishimagome-board.vercel.app
+
+
 # 西馬込 次のホーム
 
 都営浅草線・西馬込駅の次発列車と番線をリアルタイムで表示する非公式Webアプリ。
