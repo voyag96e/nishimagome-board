@@ -45,6 +45,8 @@ export const STATION_NAMES: Record<string, string> = {
   // 北総線
   "odpt.Station:Hokuso.Hokuso.ImbaNihonIdai": "印旛日本医大",
   "odpt.Station:Hokuso.Hokuso.Impresscity-Chiba-NT-Chuo": "印西牧の原",
+  "odpt.Station:Hokuso.Hokuso.InzaiMakinohara": "印西牧の原",
+  "odpt.Station:Hokuso.Hokuso.Inzai-Makinohara": "印西牧の原",
   "odpt.Station:Hokuso.Hokuso.ChibaNewTownChuo": "千葉ニュータウン中央",
   "odpt.Station:Hokuso.Hokuso.HigashiMatsudo": "東松戸",
   // 京急本線
@@ -147,6 +149,8 @@ export const DESTINATION_SHORT_NAMES: Record<string, string> = {
   "NaritaAirportTerminal2and3": "空港第2ビル",
   "ImbaNihonIdai": "印旛日本医大",
   "Impresscity-Chiba-NT-Chuo": "印西牧の原",
+  "InzaiMakinohara": "印西牧の原",
+  "Inzai-Makinohara": "印西牧の原",
   "ChibaNewTownChuo": "千葉ニュータウン中央",
   "HigashiMatsudo": "東松戸",
   "ShibayamaChiyoda": "芝山千代田",
