@@ -126,12 +126,69 @@ export const TRAIN_TYPES: Record<
   },
 };
 
-// 不明な駅IDから表示用文字列にフォールバック変換
-// "odpt.Station:Hokuso.Hokuso.ImbaNihonIdai" → "ImbaNihonIdai"
+// 駅IDの末尾短縮形 → 日本語駅名（STATION_NAMES に存在しない場合のフォールバック）
+export const DESTINATION_SHORT_NAMES: Record<string, string> = {
+  // 京成本線
+  "KeiseiNarita": "京成成田",
+  "KeiseiTakasago": "京成高砂",
+  "KeiseiUeno": "京成上野",
+  "KeiseiChiba": "京成千葉",
+  "Keisei-Koenji": "京成小岩",
+  "Keisei-Funabashi": "京成船橋",
+  "Narita": "成田",
+  "Takasago": "高砂",
+  "Aoto": "青砥",
+  "Sakura": "佐倉",
+  "Matsudo": "松戸",
+  "Chiba": "千葉",
+  "ChibaChuo": "千葉中央",
+  // 成田スカイアクセス / 北総線 / 芝山鉄道
+  "NaritaAirportTerminal1": "成田空港",
+  "NaritaAirportTerminal2and3": "空港第2ビル",
+  "ImbaNihonIdai": "印旛日本医大",
+  "Impresscity-Chiba-NT-Chuo": "印西牧の原",
+  "ChibaNewTownChuo": "千葉ニュータウン中央",
+  "HigashiMatsudo": "東松戸",
+  "ShibayamaChiyoda": "芝山千代田",
+  // 京急本線
+  "Shinagawa": "品川",
+  "Yokohama": "横浜",
+  "Kamiooka": "上大岡",
+  "KanazawaBunko": "金沢文庫",
+  "KanazawaHakkei": "金沢八景",
+  "Kurihama": "久里浜",
+  "Uraga": "浦賀",
+  "ZushiHayama": "逗子・葉山",
+  "Misakiguchi": "三崎口",
+  "HanedaAirportT3": "羽田空港第3ターミナル",
+  "HanedaAirportT12": "羽田空港第1・2ターミナル",
+  "HanedaAirportTerminal1And2": "羽田空港第1・2ターミナル",
+};
+
+// 種別IDの末尾短縮形 → 日本語種別名（TRAIN_TYPES に存在しない場合のフォールバック）
+export const TRAIN_TYPE_SHORT_NAMES: Record<string, string> = {
+  "Local": "普通",
+  "Express": "急行",
+  "Rapid": "快速",
+  "LimitedExpress": "特急",
+  "RapidLimitedExpress": "快特",
+  "CommuterLimitedExpress": "通勤特急",
+  "CommuterExpress": "通勤急行",
+  "CommuterRapid": "通勤快速",
+  "AirportRapidLimitedExpress": "エアポート快特",
+  "AccessExpress": "アクセス特急",
+  "Access-Express": "アクセス特急",
+  "AirportExpress": "エアポート急行",
+  "SemiExpress": "準急",
+  "Morning-Wing": "モーニング・ウィング号",
+  "Evening-Wing": "イブニング・ウィング号",
+};
+
+// 不明な駅IDから日本語名にフォールバック変換
 export function getStationName(id: string): string {
   if (STATION_NAMES[id]) return STATION_NAMES[id];
-  const parts = id.split(".");
-  return parts[parts.length - 1] ?? id;
+  const shortName = id.split(".").pop() ?? id;
+  return DESTINATION_SHORT_NAMES[shortName] ?? shortName;
 }
 
 export function getRailwayName(id: string): string {
@@ -139,7 +196,8 @@ export function getRailwayName(id: string): string {
 }
 
 export function getTrainType(typeId: string) {
-  return (
-    TRAIN_TYPES[typeId] ?? { label: typeId.split(".").pop() ?? "不明", bg: "bg-gray-400", text: "text-white" }
-  );
+  if (TRAIN_TYPES[typeId]) return TRAIN_TYPES[typeId];
+  const shortName = typeId.split(".").pop() ?? typeId;
+  const label = TRAIN_TYPE_SHORT_NAMES[shortName] ?? shortName;
+  return { label, bg: "bg-gray-400", text: "text-white" };
 }
