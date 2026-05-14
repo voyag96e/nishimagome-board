@@ -31,21 +31,51 @@ export interface StationTimetable {
   "odpt:stationTimetableObject": StationTimetableObject[];
 }
 
+/**
+ * ODPT時刻表APIからデータを取得する。
+ *
+ * ⚠️ URLSearchParams を使わない理由:
+ *   ODPT API はパス (`odpt:StationTimetable`) とクエリパラメータ名 (`odpt:railway`) に
+ *   コロンを含む非標準形式を使用する。URLSearchParams はコロンを %3A にエンコードするため
+ *   APIが404を返す可能性がある。パラメータは全て定数でユーザー入力を含まないため
+ *   テンプレートリテラルによる手動構築が安全かつ正確。
+ *
+ * ⚠️ cache: "no-store" を使う理由:
+ *   next: { revalidate } を使うと Next.js 拡張キャッシュ経由になり、
+ *   Vercel 本番環境 (Linux) でURLの処理が変わって404が発生する。
+ *   cache: "no-store" で素のHTTPリクエストになり、ローカル/本番で同じ挙動になる。
+ */
 export async function fetchStationTimetable(): Promise<StationTimetable[]> {
   const url =
     `${ODPT_BASE_URL}/odpt:StationTimetable` +
     `?odpt:railway=${RAILWAY_ID}` +
     `&odpt:station=${STATION_ID}`;
 
-  const res = await fetch(url, {
-    next: { revalidate: 3600 }, // 1時間キャッシュ
-  });
-
-  if (!res.ok) {
-    throw new Error(`ODPT API エラー: ${res.status} ${res.statusText}`);
+  if (process.env.NODE_ENV === "development") {
+    console.log("[ODPT] fetch →", url);
   }
 
-  return res.json() as Promise<StationTimetable[]>;
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      cache: "no-store", // ISRキャッシュを使わず毎回最新データを取得
+    });
+  } catch (networkError) {
+    const msg = networkError instanceof Error ? networkError.message : String(networkError);
+    throw new Error(`ODPT API ネットワークエラー: ${msg}`, { cause: url });
+  }
+
+  if (!res.ok) {
+    throw new Error(`ODPT API エラー: ${res.status} ${res.statusText}`, { cause: url });
+  }
+
+  const data = (await res.json()) as StationTimetable[];
+
+  if (!Array.isArray(data) || data.length === 0) {
+    throw new Error("ODPT API: データが空でした", { cause: url });
+  }
+
+  return data;
 }
 
 // HH:MM 形式の文字列を「その日の経過分」に変換
