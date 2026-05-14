@@ -53,6 +53,20 @@ export default async function Page() {
   return (
     <main className="p-3 sm:p-6 max-w-2xl mx-auto">
       <DepartureBoard timetables={timetables} />
+      <section className="mt-6 pt-4 border-t border-gray-800/50">
+        <h2 className="text-xs font-semibold text-gray-600 mb-2">
+          西馬込 次のホームとは
+        </h2>
+        <p className="text-xs text-gray-700 leading-relaxed">
+          「西馬込 次のホーム」は、都営浅草線・西馬込駅の次の発車ホームをスマホですぐ確認できる非公式Webアプリです。
+          西馬込駅の1番線・2番線どちらに向かえばよいかを時刻表データをもとにリアルタイムで表示します。
+          通勤・通学・おでかけ時の発車ホーム確認にご活用ください。
+        </p>
+        <p className="text-xs text-gray-700 leading-relaxed mt-1.5">
+          本サービスはODPT（公共交通オープンデータ協議会）および東京都交通局が提供するオープンデータを利用した非公式サービスです。
+          実際の発車番線は駅の案内表示でご確認ください。
+        </p>
+      </section>
     </main>
   );
 }
